@@ -9,6 +9,98 @@ L298N motorRight(L298N_ENB, L298N_IN3, L298N_IN4);
 
 int nav_speed = NAV_SPEED;
 
+char APP_STATE = APP_STATE_MANUAL;
+char followerEnable = 0;
+
+char chassisBusy = 0;
+volatile int chassisNavTime = 0;
+
+char chassisProgram = 0;
+int progIt = 0;
+
+char nav_program[NAV_PROGRAM_SIZE] = "FLFLFLFL";
+char log_program[NAV_PROGRAM_SIZE] = {""};
+char log_program_it = 0;
+
+struct TaskContext_str
+{
+    int REQURENCY;
+    int OFFSET;
+    int ReqCnt;
+    void (*execute)(void);
+};
+
+struct digital_sensor_str
+{
+    uint16_t pin;
+    uint16_t dataRaw;
+};
+
+struct digital_sensor_str sensorLine[LINE_SENSOR_NR_OF];
+
+struct distance_sensor_str
+{
+    uint16_t trigPin;
+    uint16_t echoPin;
+    uint32_t duration;
+    uint32_t distance;
+    uint16_t distanceBuffer[DIST_BUFF_SIZE];
+    uint16_t buffPos;
+};
+
+struct distance_sensor_str sensorDistance[DISTANCE_SENSOR_NR_OF];
+
+struct binary_sensor_str
+{
+    uint8_t pin;
+    uint8_t dataRaw;
+
+    int8_t abcCnt;
+    int8_t abcMax;
+    int8_t abcMin;
+
+    uint8_t dataFilt;
+};
+
+struct binary_sensor_str sensorSoundDet;
+
+struct binary_sensor_str sensorBumper[BUMPER_NR_OF] = {
+    // pin / dataRaw / abcCnt / abcMax / abcMin / dataFilt
+    {SENS_BUMPER_LEFT_PIN, 0, 0, 4, 0, 0},
+    {SENS_BUMPER_RIGHT_PIN, 0, 0, 4, 0, 0}
+};
+
+char morse_Codes[40][10] =
+    {
+        ".-",
+        "-...",
+        "-.-.",
+        "-..",
+        ".",
+        "..-.",
+        "--.",
+        "....",
+        "..",
+        ".---",
+        ".-.-",
+        ".-..",
+        "--",
+        "-.",
+        "---",
+        ".--.",
+        "--.-",
+        ".-.",
+        "...",
+        "-",
+        "..-",
+        "...-",
+        ".--",
+        "-..-",
+        "-.--",
+        "--..",
+        " "};
+int buzzerPin = 13;
+
 void ChassisNavSpeedUp(void)
 {
     if (++nav_speed > NAV_SPEED_MAX)
@@ -19,12 +111,6 @@ void ChassisNavSpeedInit(void)
 {
     nav_speed = NAV_SPEED;
 }
-
-char chassisBusy = 0;
-volatile int chassisNavTime = 0;
-
-char chassisProgram = 0;
-int progIt = 0;
 
 void ChassisStop(void)
 { // steps in ms
@@ -93,9 +179,6 @@ void ChassisTurnRight(int angle)
     chassisNavTime = angle;
 }
 
-char nav_program[NAV_PROGRAM_SIZE] = "FLFLFLFL";
-char log_program[NAV_PROGRAM_SIZE] = {""};
-char log_program_it = 0;
 void ChassisNavProgram(char program[])
 {
     int i = 0;
@@ -111,20 +194,11 @@ void ChassisNavProgram(char program[])
     MON_SERIAL.println(nav_program);
 }
 
-struct TaskContext_str
-{
-    int REQURENCY;
-    int OFFSET;
-    int ReqCnt;
-    void (*execute)(void);
-};
-
 void ChassisTask_Run(void);
 void SoundDetTask_Run(void);
 void BumperTask_Run(void);
 void LineSensorTask_Run(void);
 void DistanceSensorTask_Run(void);
-
 
 struct TaskContext_str TASK_List[NR_OF_TASKS] = {
     // REQURENCY / OFFSET / ReqCnt / runnable func;
@@ -135,15 +209,6 @@ struct TaskContext_str TASK_List[NR_OF_TASKS] = {
 
 //===============================================
 // LINE Sensor task
-
-struct digital_sensor_str
-{
-    uint16_t pin;
-    uint16_t dataRaw;
-};
-
-
-struct digital_sensor_str sensorLine[LINE_SENSOR_NR_OF];
 
 void AnalogSensorEval(struct digital_sensor_str &sensor)
 {
@@ -173,18 +238,6 @@ void LineSensorTask_Run(void)
 
 //============================
 // Distance sensor
-struct distance_sensor_str
-{
-    uint16_t trigPin;
-    uint16_t echoPin;
-    uint32_t duration;
-    uint32_t distance;
-    uint16_t distanceBuffer[DIST_BUFF_SIZE];
-    uint16_t buffPos;
-};
-
-
-struct distance_sensor_str sensorDistance[DISTANCE_SENSOR_NR_OF];
 
 int distsort(const void *p, const void *q)
 {
@@ -331,19 +384,6 @@ void ChassisTask_Run(void)
 }
 //===============================================
 // SND DET TASK 2
-struct binary_sensor_str
-{
-    uint8_t pin;
-    uint8_t dataRaw;
-
-    int8_t abcCnt;
-    int8_t abcMax;
-    int8_t abcMin;
-
-    uint8_t dataFilt;
-};
-
-struct binary_sensor_str sensorSoundDet;
 
 char Get_SoundDetRaw(void)
 {
@@ -366,11 +406,6 @@ void SoundDetTask_Run(void)
 
 //===================================
 // Bumper Task
-
-struct binary_sensor_str sensorBumper[BUMPER_NR_OF] = {
-    // pin / dataRaw / abcCnt / abcMax / abcMin / dataFilt
-    {SENS_BUMPER_LEFT_PIN, 0, 0, 4, 0, 0},
-    {SENS_BUMPER_RIGHT_PIN, 0, 0, 4, 0, 0}};
 
 char Get_BumperRaw(uint8_t sensorId)
 {
@@ -465,36 +500,6 @@ void SysTick(void)
 }
 //===============================================
 // MORSE Generator
-char morse_Codes[40][10] =
-    {
-        ".-",
-        "-...",
-        "-.-.",
-        "-..",
-        ".",
-        "..-.",
-        "--.",
-        "....",
-        "..",
-        ".---",
-        ".-.-",
-        ".-..",
-        "--",
-        "-.",
-        "---",
-        ".--.",
-        "--.-",
-        ".-.",
-        "...",
-        "-",
-        "..-",
-        "...-",
-        ".--",
-        "-..-",
-        "-.--",
-        "--..",
-        " "};
-int buzzerPin = 13;
 
 void PlayMorse(char morse[])
 {
@@ -669,9 +674,6 @@ void setup()
     MsTimer2::set(SYS_TICK_TIME, SysTick); // 1ms period
     MsTimer2::start();
 }
-
-char APP_STATE = APP_STATE_MANUAL;
-char followerEnable = 0;
 
 void loop()
 {
