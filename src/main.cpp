@@ -93,8 +93,6 @@ void ChassisTurnRight(int angle)
     chassisNavTime = angle;
 }
 
-#define NAV_PROGRAM_SIZE 100
-
 char nav_program[NAV_PROGRAM_SIZE] = "FLFLFLFL";
 char log_program[NAV_PROGRAM_SIZE] = {""};
 char log_program_it = 0;
@@ -127,7 +125,7 @@ void BumperTask_Run(void);
 void LineSensorTask_Run(void);
 void DistanceSensorTask_Run(void);
 
-#define NR_OF_TASKS 4
+
 struct TaskContext_str TASK_List[NR_OF_TASKS] = {
     // REQURENCY / OFFSET / ReqCnt / runnable func;
     {CHASSIS_REQ, 3, 0, ChassisTask_Run},
@@ -144,7 +142,6 @@ struct digital_sensor_str
     uint16_t dataRaw;
 };
 
-#define LINE_SENSOR_NR_OF 5
 
 struct digital_sensor_str sensorLine[LINE_SENSOR_NR_OF];
 
@@ -156,12 +153,6 @@ void AnalogSensorEval(struct digital_sensor_str &sensor)
     sensor.dataRaw = dataRawLcl;
     // Evaluation
 }
-
-#define SENS_LINE_FAR_LEFT_ID 0
-#define SENS_LINE_LEFT_ID 1
-#define SENS_LINE_CENTER_ID 2
-#define SENS_LINE_RIGHT_ID 3
-#define SENS_LINE_FAR_RIGHT_ID 4
 
 void LineSensorTask_Init(void)
 {
@@ -182,7 +173,6 @@ void LineSensorTask_Run(void)
 
 //============================
 // Distance sensor
-#define DIST_BUFF_SIZE 3
 struct distance_sensor_str
 {
     uint16_t trigPin;
@@ -193,10 +183,6 @@ struct distance_sensor_str
     uint16_t buffPos;
 };
 
-#define INTIME_DISTANCE (50.0)
-#define MAX_DUR ((INTIME_DISTANCE * 2.0) / 0.034)
-
-#define DISTANCE_SENSOR_NR_OF 3
 
 struct distance_sensor_str sensorDistance[DISTANCE_SENSOR_NR_OF];
 
@@ -257,9 +243,6 @@ void DistanceSensorEval(struct distance_sensor_str &sensor)
 }
 
 // Distance sensor Pinmap
-#define SENS_US_LEFT_ID 0
-#define SENS_US_CENTER_ID 1
-#define SENS_US_RIGHT_ID 2
 
 void DistanceSensorTask_Init(void)
 {
@@ -383,9 +366,6 @@ void SoundDetTask_Run(void)
 
 //===================================
 // Bumper Task
-#define BUMPER_NR_OF 2
-#define SENS_BUMPER_LEFT_ID 0
-#define SENS_BUMPER_RIGHT_ID 1
 
 struct binary_sensor_str sensorBumper[BUMPER_NR_OF] = {
     // pin / dataRaw / abcCnt / abcMax / abcMin / dataFilt
@@ -515,10 +495,6 @@ char morse_Codes[40][10] =
         "--..",
         " "};
 int buzzerPin = 13;
-#define MORSE_FRQ 440
-#define MORSE_DOT_DUR (100)
-#define MORSE_DASH_DUR (MORSE_DOT_DUR * 3)
-#define MORSE_PAUSE (MORSE_DASH_DUR)
 
 void PlayMorse(char morse[])
 {
@@ -558,9 +534,6 @@ void PlayMorseString(char morseStr[])
         i++;
     }
 }
-
-#define DISTANCE_MIN 7
-#define DISTANCE_MAX 15
 
 void FollowerAppTask_Run(void)
 {
@@ -696,10 +669,6 @@ void setup()
     MsTimer2::set(SYS_TICK_TIME, SysTick); // 1ms period
     MsTimer2::start();
 }
-
-#define APP_STATE_MANUAL 1
-#define APP_STATE_AUTO_FOLLOW 2
-#define APP_STATE_AUTO_TUNEL 3
 
 char APP_STATE = APP_STATE_MANUAL;
 char followerEnable = 0;
