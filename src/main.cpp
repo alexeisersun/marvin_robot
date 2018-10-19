@@ -67,8 +67,7 @@ struct binary_sensor_str sensorSoundDet;
 struct binary_sensor_str sensorBumper[BUMPER_NR_OF] = {
     // pin / dataRaw / abcCnt / abcMax / abcMin / dataFilt
     {SENS_BUMPER_LEFT_PIN, 0, 0, 4, 0, 0},
-    {SENS_BUMPER_RIGHT_PIN, 0, 0, 4, 0, 0}
-};
+    {SENS_BUMPER_RIGHT_PIN, 0, 0, 4, 0, 0}};
 
 char morse_Codes[40][10] =
     {
@@ -658,7 +657,6 @@ void TunelAppTask_Run(void)
 
 void setup()
 {
-    // put your setup code here, to run once:
     CTRL_SERIAL.begin(9600);
     MON_SERIAL.begin(9600);
 
@@ -669,15 +667,12 @@ void setup()
     LineSensorTask_Init();
     DistanceSensorTask_Init();
 
-    //CTRL_SERIAL.println("SYS TICK set");
-
     MsTimer2::set(SYS_TICK_TIME, SysTick); // 1ms period
     MsTimer2::start();
 }
 
 void loop()
 {
-    // put your main code here, to run repeatedly:
 
     DistanceSensorTask_Run();
 
@@ -791,15 +786,4 @@ void loop()
             CTRL_SERIAL.println("Comanda necunoscuta ");
         }
     }
-
-    // MON_SERIAL.print((int)Get_BumperRaw(SENS_BUMPER_LEFT_ID));
-    // MON_SERIAL.print(" ");
-    // MON_SERIAL.print((int)Get_BumperAbcCnt(SENS_BUMPER_LEFT_ID));
-    // MON_SERIAL.print(" ");
-    // MON_SERIAL.print((int)Get_BumperFilt(SENS_BUMPER_LEFT_ID));
-    // MON_SERIAL.print(" ");
-    // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
-    // MON_SERIAL.println(distanceSensor.measureDistanceCm());
-    // MON_SERIAL.print(" ");
-    //MON_SERIAL.println("");
 }
