@@ -46,7 +46,6 @@ void DistanceSensorTask_Init(void)
 
     sensorDistance[SENS_US_RIGHT_ID].trigPin = SENS_US_TRIG_RIGHT_PIN;
     sensorDistance[SENS_US_RIGHT_ID].echoPin = SENS_US_ECHO_RIGHT_PIN;
-
     for (int i = 0; i < DISTANCE_SENSOR_NR_OF; i++)
     {
         pinMode(sensorDistance[i].trigPin, OUTPUT);

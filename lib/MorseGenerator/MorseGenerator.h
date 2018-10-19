@@ -35,4 +35,8 @@ extern char morse_Codes[40][10] =
         " "};
 extern int buzzerPin = 13;
 
+
+void PlayMorse(char morse[]);
+void PlayMorseString(char morseStr[]);
+
 #endif

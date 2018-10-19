@@ -16,4 +16,8 @@ struct distance_sensor_str
 
 extern struct distance_sensor_str sensorDistance[DISTANCE_SENSOR_NR_OF];
 
+void DistanceSensorEval(struct distance_sensor_str *sensor);
+void DistanceSensorTask_Init(void);
+void DistanceSensorTask_Run(void);
+
 #endif
