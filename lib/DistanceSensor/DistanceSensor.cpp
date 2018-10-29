@@ -9,8 +9,7 @@ int distsort(const void *p, const void *q)
         return 1;
     if (l == r)
         return 0;
-    if (l < r)
-        return -1;
+    return -1;
 }
 
 void DistanceSensorEval(struct distance_sensor_str *sensor)
