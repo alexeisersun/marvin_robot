@@ -1,0 +1,3 @@
+[submodule "lib/ConcurrentPulse"]
+	path = lib/ConcurrentPulse
+	url = https://github.com/alexeisersun/ConcurrentPulse
