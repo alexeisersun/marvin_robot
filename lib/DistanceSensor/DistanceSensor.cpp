@@ -1,5 +1,7 @@
 #include <DistanceSensor.h>
 
+struct distance_sensor_str sensorDistance[DISTANCE_SENSOR_NR_OF];
+
 int distsort(const void *p, const void *q)
 {
     int l = *(const int *)p;

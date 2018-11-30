@@ -1,6 +1,8 @@
 #include <SoundDetection.h>
 #include <Arduino.h>
 
+struct binary_sensor_str sensorSoundDet;
+
 char Get_SoundDetRaw(void)
 {
     return sensorSoundDet.dataRaw;

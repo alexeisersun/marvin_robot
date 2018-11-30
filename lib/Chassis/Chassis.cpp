@@ -1,5 +1,20 @@
 #include <Chassis.h>
 
+int nav_speed = NAV_SPEED;
+char chassisBusy = 0;
+volatile int chassisNavTime = 0;
+char chassisProgram = 0;
+int progIt = 0;
+
+char nav_program[NAV_PROGRAM_SIZE] = "FLFLFLFL";
+char log_program[NAV_PROGRAM_SIZE] = {""};
+int log_program_it = 0;
+
+//create a Left motor instance
+L298N motorLeft(L298N_ENA, L298N_IN1, L298N_IN2);
+//create a Right motor instance
+L298N motorRight(L298N_ENB, L298N_IN3, L298N_IN4);
+
 void ChassisNavSpeedUp(void)
 {
     if (++nav_speed > NAV_SPEED_MAX)

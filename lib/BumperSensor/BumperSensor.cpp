@@ -1,5 +1,10 @@
 #include <BumperSensor.h>
 
+struct binary_sensor_str sensorBumper[BUMPER_NR_OF] = {
+    // pin / dataRaw / abcCnt / abcMax / abcMin / dataFilt
+    {SENS_BUMPER_LEFT_PIN, 0, 0, 4, 0, 0},
+    {SENS_BUMPER_RIGHT_PIN, 0, 0, 4, 0, 0}};
+
 char Get_BumperRaw(uint8_t sensorId)
 {
     return sensorBumper[sensorId].dataRaw;

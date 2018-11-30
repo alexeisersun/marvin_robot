@@ -162,7 +162,6 @@ void setup()
 {
     CTRL_SERIAL.begin(9600);
     MON_SERIAL.begin(9600);
-    pulseIn();
     pinMode(13, OUTPUT);
 
     SoundDetTask_Init();

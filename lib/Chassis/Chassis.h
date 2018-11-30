@@ -5,21 +5,21 @@
 #include <RobotDefinitions.h>
 #include <L298N.h>
 
-
 //create a Left motor instance
-L298N motorLeft(L298N_ENA, L298N_IN1, L298N_IN2);
+extern L298N motorLeft;
 //create a Right motor instance
-L298N motorRight(L298N_ENB, L298N_IN3, L298N_IN4);
+extern L298N motorRight;
 
-extern int nav_speed = NAV_SPEED;
-extern char chassisBusy = 0;
-extern volatile int chassisNavTime = 0;
-extern char chassisProgram = 0;
-extern int progIt = 0;
 
-extern char nav_program[NAV_PROGRAM_SIZE] = "FLFLFLFL";
-extern char log_program[NAV_PROGRAM_SIZE] = {""};
-extern int log_program_it = 0;
+extern int nav_speed;
+extern char chassisBusy;
+extern volatile int chassisNavTime;
+extern char chassisProgram;
+extern int progIt;
+
+extern char nav_program[NAV_PROGRAM_SIZE];
+extern char log_program[NAV_PROGRAM_SIZE];
+extern int log_program_it;
 
 void ChassisNavSpeedUp(void);
 void ChassisNavSpeedInit(void);

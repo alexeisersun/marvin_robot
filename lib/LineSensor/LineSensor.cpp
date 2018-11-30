@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <LineSensor.h>
 
+digital_sensor_str sensorLine[LINE_SENSOR_NR_OF];
+
 void AnalogSensorEval(struct digital_sensor_str *sensor)
 {
     uint16_t dataRawLcl;
