@@ -10,38 +10,10 @@
 #include <Chassis.h>
 #include <FollowerApp.h>
 #include <TunnelApp.h>
+#include <TaskScheduler.h>
 
 char APP_STATE = APP_STATE_MANUAL;
 char followerEnable = 0;
-
-struct TaskContext_str
-{
-    int REQURENCY;
-    int OFFSET;
-    int ReqCnt;
-    void (*execute)(void);
-};
-
-struct TaskContext_str TASK_List[NR_OF_TASKS] = {
-    {CHASSIS_REQ, 3, 0, ChassisTask_Run},
-    {1, 0, 0, SoundDetTask_Run},
-    {10, 1, 0, BumperTask_Run},
-    {100, 2, 0, LineSensorTask_Run}};
-
-int TestCnt = 0;
-
-void TaskScheduler(void)
-{
-
-    for (int taskNr = 0; taskNr < NR_OF_TASKS; taskNr++)
-    {
-        if (--TASK_List[taskNr].ReqCnt <= 0)
-        {
-            TASK_List[taskNr].execute();
-            TASK_List[taskNr].ReqCnt = TASK_List[taskNr].REQURENCY;
-        }
-    }
-}
 
 void SysTick(void)
 {
