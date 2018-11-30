@@ -37,7 +37,7 @@
 #define L298N_IN4 28
 #define L298N_ENB 3
 
-#define SYS_TICK_TIME 1
+#define SYS_TICK_TIME unsigned(1)
 #define CHASSIS_REQ 50
 //====================================================
 // Chassis Driver
