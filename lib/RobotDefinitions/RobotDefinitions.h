@@ -59,7 +59,7 @@
 #define NAV_PROGRAM_SIZE 100
 
 
-#define NR_OF_TASKS 4
+#define NR_OF_TASKS 5
 
 #define LINE_SENSOR_NR_OF 5
 
