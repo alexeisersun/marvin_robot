@@ -11,6 +11,7 @@
 #include <FollowerApp.h>
 #include <TunnelApp.h>
 #include <TaskScheduler.h>
+#include <ConcurrentBumperApp.h>
 
 char APP_STATE = APP_STATE_MANUAL;
 char followerEnable = 0;
@@ -30,6 +31,7 @@ void setup()
     BumperTask_Init();
     LineSensorTask_Init();
     DistanceSensorTask_Init();
+    ConcurrentBumperApp_Init();
 
     MsTimer2::set(SYS_TICK_TIME, SysTick);
     MsTimer2::start();
